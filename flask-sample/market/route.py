@@ -90,25 +90,7 @@ def logout_page():
     flash('you have been logged out',category='info')
     return redirect(url_for('home_page'))
 
-@app.route('/additem', methods =['GET','POST'])
-@login_required
-def additem_page():
-    form = CreateItemForm()
-    if form.validate_on_submit():
-        item_to_create = Item(name=form.name.data,
-                              price=form.price.data,
-                              barcode=form.barcode.data,
-                              description=form.description.data)
-        db.session.add(item_to_create)
-        db.session.commit()
-        flash(f"Item {item_to_create.name} created successfully!", category='success')
-        return redirect(url_for('market_page'))
-    if form.errors != {}:
-        for err_msg in form.errors.values():
-            flash(f'There was an error with creating a item: {err_msg}', category='danger')
-    return render_template('additem.html',form=form)
-
-@app.route('/insert',methods =['POST','GET'])
+@app.route('/insert',methods =['POST'])
 def insert():
     if request.method == 'POST' :
         name=request.form['name']
